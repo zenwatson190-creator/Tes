@@ -1,0 +1,31 @@
+name: Generate Komisi Excel
+
+on:
+  workflow_dispatch:   # bisa dijalankan manual dari tab "Actions"
+  schedule:
+    - cron: '0 17 27 * *'   # otomatis tiap tanggal 27 jam 00:00 WIB (17:00 UTC)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install Dependencies
+      run: pip install -r requirements.txt
+
+    - name: Generate Excel File
+      run: python generate_excel.py
+
+    - name: Upload Excel as Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: komisi-kokuo
+        path: Komisi_Kokuo_*.xlsx
